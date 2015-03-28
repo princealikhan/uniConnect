@@ -1,3 +1,56 @@
+
+<?php
+session_start();
+if(!isset($_SESSION['Reg_No'])){
+ header("location:index.php"); 
+}
+
+if(isset($_GET['Reg_No']))
+{
+include "scripts/conn.php";
+$aid = preg_replace('#[^0-9]#i', '', $_GET['Reg_No']);
+$sql=mysql_query("SELECT * FROM student WHERE Reg_No=$aid LIMIT 1");
+
+$USER=mysql_num_rows($sql);
+if($USER>0){
+while($row=mysql_fetch_array($sql)){
+  $reg=$row['Reg_No'];
+    $username=$row['Name'];
+    $batch = $row['Batch'];
+    $streetname =$row['Street'];
+    $city = $row['City'];
+    $statename = $row['State'];
+    $country = $row['Country'];
+    $contact = $row['Contact_No'];
+///////  Mechanism to Display Pic. See if they have uploaded a pic or not  //////////////////////////
+  $check_pic = "Students/$aid/pic1.jpg";
+  $default_pic ="images/icons/png/user.png";
+  if (file_exists($check_pic)) {
+    $user_pic = '<img height="80px" width="80px"  src="'.$check_pic.'">';
+  } else {
+    $user_pic = '<img class="" height="80px" width="80px"  src="'.$default_pic.'">';
+      }
+  //////  Mechanism to Display Location Info or not  //////////////////////////
+  if ($country == "" && $statename == "" && $city == "" && $streetname=="") {
+    $locationInfo = "";
+  } else {
+  $locationInfo = "$city &middot; $statename<br />$country ".''; 
+  }
+
+}
+}
+else{
+echo "Article is not present";
+exit();
+}
+}
+else{
+echo "Data Render is Missing";
+exit();
+}
+mysql_close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,6 +63,7 @@
 
     <!-- Loading Flat UI -->
     <link href="css/flat-ui.css" rel="stylesheet">
+    <link href="css/demo.css" rel="stylesheet">
 
     <link rel="shortcut icon" href="images/favicon.ico">
 
@@ -18,101 +72,105 @@
       <script src="js/html5shiv.js"></script>
       <script src="js/respond.min.js"></script>
     <![endif]-->
+      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <!-- BEGIN TimelineJS -->
+        <link rel="stylesheet" type="text/css" href="http://cdn.knightlab.com/libs/timeline/latest/css/timeline.css">
+
+        <script type="text/javascript" src="http://cdn.knightlab.com/libs/timeline/latest/js/storyjs-embed.js"></script>
+        <script>
+            $(document).ready(function() {
+                createStoryJS({
+                    type:       'timeline',
+                    width:      '100%',
+                    height:     '600',
+                    source:     'https://docs.google.com/spreadsheet/pub?key=0AsAkV_lJnmq4dDdXLTRYcTZqQXU4MG5EUlFIRHJ4eEE&output=html',
+                    embed_id:   'my-timeline'
+                });
+            });
+        </script>
   </head>
   <body>
-  <br>	
-    <div class="container">
-	 <!--Header -->
-	 
-	 <div class="row">
-        <div class="col-xs-6">
-		<img src="images/icons/png/logo.png"alt="logo">
-		</div>
-		  <div class="col-xs-6" align="right">
-		  Username ___
-		  				<img height="80px" width="80px" src="images/icons/png/user.png" alt="user">
-		  </div>
-		  </div>
-		
-		<br>
-	   <!-- Navigation Bar for Landing Page -->
-    <div class="row">
-        <div class="col-ls-12">
-<nav class="navbar navbar-inverse navbar-embossed" role="navigation">
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
-      <span class="sr-only">Toggle navigation</span>
-    </button>
-    <a class="navbar-brand" href="#">UniConnect</a>
-  </div>
-  <div class="collapse navbar-collapse" id="navbar-collapse-01">
-    <ul class="nav navbar-nav">           
-      <li class="active"><a href="#fakelink">Home</a></li>
-      <li><a href="#fakelink">Profile</a></li>
-    </ul>           
-    <form class="navbar-form navbar-left" action="#" role="search">
-      <div class="form-group">
-        <div class="input-group">
-          <input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
-          <span class="input-group-btn">
-            <button type="submit" class="btn"><span class="fui-search"></span></button>
-          </span>            
-        </div>
-      </div>               
-    </form>	
-  </div><!-- /.navbar-collapse -->
-</nav>
-    </div>
-	<!-- /navbar -->
-	
-	
-	</div>
+    <br>  
+<?php  include_once('Master/header.php');
+?>
 	<!-- /sdfds-->
 	<div class="row">
 		<!-- /Opening Friend Requests Div-->
 	<div class="col-xs-10">
-	<h4>Welcome back username..</h4>
+	<h4>Welcome back <?php echo $username;?></h4>
 	<div class="row">
-			<div class="col-xs-3">
-          <div class="tile">
-            <img  height='60' width='60' src="images/icons/png/user.png">
-            <h6>Friend Name</h6>
-            <a class="btn btn-primary btn-large btn-block">Accept</a>
-          </div>		 
-        </div>
-		
-		<div class="col-xs-3">
-          <div class="tile">
-            <img  height='60' width='60' src="images/icons/png/user.png">
-            <h6>Friend Name</h6>
-            <a class="btn btn-primary btn-large btn-block">Accept</a>
-          </div>		 
-        </div>
-		<div class="col-xs-3">
-          <div class="tile">
-            <img  height='60' width='60' src="images/icons/png/user.png">
-            <h6>Friend Name</h6>
-            <a class="btn btn-primary btn-large btn-block">Accept</a>
-          </div>		 
-        </div>
-		
-		<div class="col-xs-3">
-          <div class="tile">
-            <img  height='60' width='60' src="images/icons/png/user.png">
-            <h6>Friend Name</h6>
-            <a class="btn btn-primary btn-large btn-block">Accept</a>
-          </div>		 
-        </div>
-	</div>
+
+       
+<?php
+$db_host="localhost";
+$db_username="root";
+$db_pass="";
+$db_name="uniconnect";
+mysql_connect("$db_host","$db_username","$db_pass")or die(mysql_error());
+mysql_select_db("$db_name") or die("no database by that name");
+$sql=mysql_query("SELECT * FROM assignment ORDER BY doc DESC LIMIT 4"); 
+
+while($row=mysql_fetch_array($sql)){
+  $aid=$row['aid'];
+$title=$row['title'];
+$desc=$row['desc'];
+$doc=$row['doc'];
+$doc = strftime("%d %b, %Y", strtotime($doc));
+
+echo ' <div class="col-xs-3">';
+              echo '<div class="tile">';
+             echo'  <h6>Assignment</h6>';
+          echo '  <p><strong>'.$title.'</strong> on '.$doc.'</p>  ' 
+          ;
+          echo '<p>'.$desc.'</p>';
+echo'<a href="assignment/'.$aid.'/'.$aid.'.pdf">Download</a>'; 
+                       echo'</div> </div>';
+
+}
+
+mysql_close();
+
+?>
+
+
+
+
+        
+		</div>
 	</div>
 	<!-- /Closing Friend Requests Div-->
 	<div class="col-xs-2">
-					<p class="palette-paragraph">
-					For your convenience we also provide <strong>Swatches Preset</strong> <span>(flat‑ui‑swatches.aco in the Pack folder).</span>
-					</p>
-					
+    <marquee direction="up" onmouseover="this.stop();" onmouseout="this.start();">
+                  <?php
+                  include('scripts/conn.php');
+                  $sql=mysql_query("SELECT * FROM notification  ORDER BY date DESC LIMIT 10 ");
+                  while($row = mysql_fetch_array($sql)){
+                  echo'       <p class="palette-paragraph">';
+
+                  $title=$row["title"];
+                  $date=$row["date"];
+                  $desc=$row["desc"];
+                  $date = strftime("%d %b,", strtotime($date));
+
+                  echo '<strong>'.$title.'</strong><br> Written on '.$date.'';
+                  echo $desc;
+                  echo '</p>';
+                  }?> 
+     			</marquee>
 	</div>
+
+
+  <div class="row">
+  <div class="col-xs-12">
+      <h4>HIET Academic Timeline</h4>
+      <div class="timelineborder">
+        <div id="my-timeline"></div>
+</div>
+  </div>
+  </div>
+
 	</div>
+  <br>
 	<!-- /sdfds-->
     <!-- /.container -->
 

@@ -4363,6 +4363,8 @@ body.vjs-full-window {
   position: relative;
 }
 .login-screen {
+    background: url(../images/1.jpg) 0 0 no-repeat;
+
   background-color: #1abc9c;
   min-height: 473px;
   padding: 123px 199px 33px 306px;

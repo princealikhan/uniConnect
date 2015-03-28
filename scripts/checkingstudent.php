@@ -36,7 +36,7 @@ if (strlen($username) < 5) {
 
 
 if ($uname_check < 1) {
-	echo '<p class="palette-paragraph">Sorry, but you are part of our institution,  <strong> '. $username . '.</strong></p>';
+	echo '<p class="palette-paragraph">Sorry, but you are not part of our institution,  <strong> '. $username . '.</strong></p>';
 	exit();
 } else {
 	echo '<p class="palette-paragraph">Hurray, you are part of our institution, now you can create account</p>';

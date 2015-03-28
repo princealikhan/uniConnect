@@ -1,8 +1,4 @@
 <?php
-/* 
-Created By Adam Khoury @ www.flashbuilding.com 
------------------------June 20, 2008----------------------- 
-*/
 $errorMSG="";
 if (isset($_POST['submit'])) {
 //Connect to the database through our include 
@@ -19,7 +15,10 @@ $login_check = mysql_num_rows($sql);
 if($login_check > 0){ 
     while($row = mysql_fetch_array($sql)){ 
         // Get member ID into a session variable
-        $id = $row["Reg_No"];   
+        $id = $row["Reg_No"];  
+        $username=$row['Name'];
+        session_register('Name') ;
+        $_SESSION['Name']=$username;
         session_register('Reg_No'); 
         $_SESSION['Reg_No'] = $id;
         // Get member username into a session variable
@@ -28,13 +27,25 @@ if($login_check > 0){
         $_SESSION['Email'] = $email;
         // Update last_log_date field for this member now
         // Print success message here if all went well then exit the script
-    header("location: home.php?id=$id"); 
+        
+        //First time user
+$name=$row['Name'];
+$dob=$row['DOB'];
+       
+if (($name=="" OR $name==NULL) &&($dob=="" OR $dob==NULL))
+        {
+        $_SESSION['abc'] = "cool";
+          header("location: edit.php?id=$id"); 
+          exit();
+        }
+
+
+    header("location: home.php?Reg_No=$id"); 
     exit();
     } // close while
 } else {
 // Print login failure message to the user and link them back to your login page
-$errorMSG="Oops, No match in our record try again";
-  exit();
+$errorMSG="<br>Oops, No match in our record try again";
 }
 }// close if post
 ?>
@@ -66,7 +77,7 @@ $errorMSG="Oops, No match in our record try again";
     <div class="container">
      
 <br>
-      <div class="login">
+      <div class="login" background="1.jpeg">
         <div class="login-screen">
           <div class="login-icon">
             <img src="images/icons/png/Infinity-Loop.png" alt="Welcome to Mail App" />
@@ -77,10 +88,9 @@ Login Here!
 <form action="login.php" method="POST">
           <div class="login-form">
             <div class="form-group">
-               <input type="email" name="email" class="form-control login-field" value="" placeholder="Enter your email" id="login-name" />
+              <input type="email" name="email" class="form-control login-field" value="" placeholder="Enter your email" id="login-name" />
               <label class="login-field-icon fui-mail" for="login-name"></label>
-      
-     </div>
+            </div>
        
             <div class="form-group">
               <input type="password" name="password" class="form-control login-field" value="" placeholder="Password" id="login-pass" />
